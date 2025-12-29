@@ -3,10 +3,6 @@
 declare(strict_types=1);
 // Espace de noms du noyau
 namespace Mini\Core;
-// Déclare le routeur HTTP minimaliste
-header("Access-Control-Allow-Origin : *");
-header("Access-Control-Allow-Methods : OPTIONS, GET, POST");
-header("Access-Control-Allow-Headers : Content-Type");
 
 final class Router
 {

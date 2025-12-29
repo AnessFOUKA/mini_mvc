@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pompiere&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./src/styleIndex.css">
+</head>
+<body>
+    <section id="main" x-data>
+        <img src="http://localhost:8080/s.jpg" id="background">
+        <nav>
+            <label id="navBarLogo">pick n' buy</label> 
+            <section id="searchBarSection">
+                <div id="specialStyleRule">
+                    <button id="categoriesButton" @click="$store.data.showCategories=!$store.data.showCategories" x-text="$store.data.searchCategory"></button>
+                    <input type="text" id="searchBar">
+                    <button id="searchButton">rechercher</button>
+                </div>
+            </section>
+            <label>mon panier</label>
+            <label>mon compte</label>
+        </nav>
+        <label id="categoryLabel" x-text="$store.data.categories[$store.data.categoryId].nom"></label>
+        <section id="products">
+            <template x-for="(product,productId) in $store.data.produits" :key="productId">
+                <img x-bind:src="`http://localhost:8080/${product.image}`" id="product" x-show="product.id_categorie===$store.data.categories[$store.data.categoryId].id_categorie">
+            </template>
+        </section>
+        <section id="categoriesMenu" x-show="$store.data.showCategories">
+            <label @click="$store.data.searchCategory='toutes catégories'">toutes catégories</label>
+            <template x-for="(category,categoryIndex) in $store.data.categories" :key="categoryIndex">
+                <label x-text="category.nom" @click="$store.data.searchCategory=category.nom"></label>
+            </template>
+        </section>
+        <section id="imageText">
+            <label id="subtext">retrouvez vos produits aux meilleurs prix sur</label>
+            <label id="title">Pick n' buy</label>
+        </section>
+        <footer>
+            <label>©Pick n' buy - tous droits réservés</label>
+        </footer>
+    </section>
+    <script type="module" src="./src/indexScript.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./src/styleAccountAuth.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pompiere&display=swap" rel="stylesheet">
+</head>
+<body>
+  <section id="main" x-data>
+    <form @submit.prevent>
+      <label id="frameTitle" x-text="$store.data.fieldIndex"></label>
+      <template x-for="field in $store.data.fields[$store.data.fieldIndex]">
+        <section class="fields">
+          <label for="field" x-text="field"></label>
+          <input type="text" id="field" x-model="$store.data.fieldsValues[field]">
+        </section>
+      </template>
+      
+      <input type="submit" id="submit" value="S'inscrire" x-show="$store.data.fieldIndex==='Inscription'" @click="$store.data.signUp()">
+      <input type="submit" id="submit" value="Se connecter" x-show="$store.data.fieldIndex==='Connexion'" @click="$store.data.signIn()">
+      <label id="authChanger" x-text="$store.data.fieldIndex==='Connexion'?`Je n'ai pas de compte ? S'inscrire`:`J'ai un compte ? S'inscrire`" @click="(()=>{
+        $store.data.fieldIndex==='Connexion'?$store.data.fieldIndex='Inscription':$store.data.fieldIndex='Connexion';
+        $store.data.fieldsValues={
+          'mail':'',
+          'mot de passe':'',
+          'adresse':'',
+          'ville':'',
+          'code postal':''
+        }
+      })()"></label>
+    </form>
+    <section id="message" x-show="$store.data.loading">
+      <label id="title">Message</label>
+      <label id="text">loading</label>
+    </section>
+    <section id="message" x-show="$store.data.error.length>0">
+      <label id="title">Error</label>
+      <label x-text="$store.data.error" id="text"></label>
+      <button @click="(()=>{
+        $store.data.error='';
+        $store.data.fieldsValues={
+          'mail':'',
+          'mot de passe':'',
+          'adresse':'',
+          'ville':'',
+          'code postal':''
+        };
+      })()">Ok</button>
+    </section>
+  </section>
+  <script type="module" src="./src/AccountAuth.js"></script>
+</body>
+</html>

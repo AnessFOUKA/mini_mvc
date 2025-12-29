@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pompiere&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./src/styleProductPage.css">
+</head>
+<body>
+    <section id="main" x-data>
+        <nav>
+            <label id="navBarLogo">pick n' buy</label> 
+            <section id="searchBarSection">
+                <div id="specialStyleRule">
+                    <button id="categoriesButton" @click="$store.data.showCategories=!$store.data.showCategories" x-text="$store.data.searchCategory"></button>
+                    <input type="text" id="searchBar">
+                    <button id="searchButton">rechercher</button>
+                </div>
+            </section>
+            <label>mon panier</label>
+            <label>mon compte</label>
+        </nav>
+        <img x-bind:src="`http://localhost:8080/${$store.data.produit.image}`" id="productImage">
+        <section id="productData">
+            <label class="data" x-text="`Nom: ${$store.data.produit.nom}`"></label>
+            <label class="data" x-text="`Prix: ${$store.data.produit.prix}`"></label>
+            <label class="data" x-text="`Stock: ${$store.data.produit.stock}`"></label>
+            <label class="data" x-text="`catégorie: ${$store.data.productCategory}`"></label>
+            <label class="data">Description:</label>
+            <label class="data" x-text="$store.data.produit.description"></label>
+            <button class="data">acheter</button>
+            <button class="data">ajouter au panier</button>
+            <section>
+                <label @click="$store.data.quantity-=($store.data.quantity>1?1:0)"> - </label>
+                <label x-text="$store.data.quantity"></label>
+                <label @click="$store.data.quantity+=($store.data.quantity<$store.data.produit.stock?1:0)"> + </label>
+            </section>
+        </section>
+        <section id="categoriesMenu" x-show="$store.data.showCategories">
+            <label @click="$store.data.searchCategory='toutes catégories'">toutes catégories</label>
+            <template x-for="(category,categoryIndex) in $store.data.categories" :key="categoryIndex">
+                <label x-text="category.nom" @click="$store.data.searchCategory=category.nom"></label>
+            </template>
+        </section>
+        <label id="categoryLabel">Autres produits de la même catégorie</label>
+        <section id="products">
+            <template x-for="(product,productId) in $store.data.produits" :key="productId">
+                <img x-bind:src="`http://localhost:8080/${product.image}`" id="product" x-show="product.id_categorie===$store.data.produit.id_categorie&&product.id_produit!=$store.data.produit.id_produit">
+            </template>
+        </section>
+        <footer>
+            <label>©Pick n' buy - tous droits réservés</label>
+        </footer>
+    </section>
+    <script type="module" src="./src/productPageScript.js"></script>
+</body>
+</html>

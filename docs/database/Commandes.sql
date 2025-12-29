@@ -79,6 +79,32 @@ CREATE TABLE Contenir (
        ON UPDATE CASCADE
 );
 
+CREATE TABLE panier(
+   id_panier INT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+   id_client INT,
+   FOREIGN KEY (id_client) REFERENCES client(id_client)
+           ON DELETE CASCADE
+           ON UPDATE CASCADE,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE panier_contenu(
+   id_panier INT,
+   id_produit INT,
+   quantite INT,
+   prix_unitaire DECIMAL(15,2),
+   FOREIGN KEY (id_panier) REFERENCES panier(id_panier)
+      ON UPDATE CASCADE
+      ON DELETE CASCADE,
+   
+   FOREIGN KEY (id_produit) REFERENCES produit(id_produit)
+      ON UPDATE CASCADE
+      ON DELETE CASCADE,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 INSERT INTO Categorie(nom,description,image) VALUES
 ("hygiene","ici se trouvent les produits d'hygiene","hygiene.png"),
 ("electronique","des produits electroniques nouveaux, toujours a la pointe de la technologie","electronique.png"),
@@ -175,3 +201,9 @@ INSERT INTO Contenir (id_produit, id_commande, quantite, prix_unitaire, sous_tot
 INSERT INTO Administrateur (nom_utilisateur, email, mot_de_passe, superadmin) VALUES
 ('admin1', 'admin1@example.com', 'motdepasse1', FALSE),
 ('superadmin', 'superadmin@example.com', 'motdepasse2', TRUE);
+
+INSERT INTO Panier (id_client) VALUES (1);
+
+INSERT INTO Panier_Contenu (id_panier, id_produit, quantite, prix_unitaire) VALUES
+(1, 3, 2, 2.80),
+(1, 4, 1, 1.50);

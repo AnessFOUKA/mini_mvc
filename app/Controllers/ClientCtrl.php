@@ -7,6 +7,9 @@ namespace Mini\Controllers;
 // Importe la classe de base Controller du noyau
 use Mini\Core\Controller;
 use Mini\Models\Client;
+use Mini\Models\Panier;
+use Mini\Models\PanierContenu;
+use Mini\Models\Produit;
 
 // Déclare la classe finale HomeController qui hérite de Controller
 final class ClientCtrl extends Controller
@@ -44,6 +47,29 @@ final class ClientCtrl extends Controller
         $client->setEmail($_POST["email"]);
         $client->setMotDePasse($_POST["motDePasse"]);
         $client->save();
+        $data=Client::getAll()[0];
+        $panier=new Panier();
+        $panier->setIdClient($data["id_client"]);
+        $panier->save();
+    }
+
+    public function getClientPanier(){
+        $paniers=Panier::getAll();
+        $paniersContenu=PanierContenu::getAll();
+        $produitsId=[];
+        if(isset($_GET["id"])){
+            foreach($paniers as $panier){
+                if($panier["id_client"]==$_GET["id"]){
+                    foreach($paniersContenu as $panierContenu){
+                        if($panierContenu["id_panier"]==$panier["id_panier"]){
+                            $produitsId[]=["panierContenu"=>$panierContenu,"infosProduit"=>Produit::findByIdProduit($panierContenu["id_produit"])];     
+                        }
+                    }
+                }
+            }
+            header("Content-Type:application/json");
+            echo json_encode($produitsId);
+        }
     }
 
     public function updateClient(){
