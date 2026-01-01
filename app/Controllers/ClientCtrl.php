@@ -10,6 +10,7 @@ use Mini\Models\Client;
 use Mini\Models\Panier;
 use Mini\Models\PanierContenu;
 use Mini\Models\Produit;
+use Mini\Models\Commande;
 
 // Déclare la classe finale HomeController qui hérite de Controller
 final class ClientCtrl extends Controller
@@ -31,7 +32,7 @@ final class ClientCtrl extends Controller
     }
 
     public function createClient(){
-        foreach(["adresse","ville","codePostal","email","motDePasse"] as $field){
+        foreach(["adresse","ville","codePostal","username","email","motDePasse"] as $field){
             if(!isset($_POST[$field])){
                 header("Content-Type:application/json");
                 echo json_encode([
@@ -41,6 +42,7 @@ final class ClientCtrl extends Controller
             }
         }
         $client=new Client();
+        $client->setUsername($_POST["username"]);
         $client->setAdresse($_POST["adresse"]);
         $client->setVille($_POST["ville"]);
         $client->setCodePostal($_POST["codePostal"]);
@@ -51,6 +53,20 @@ final class ClientCtrl extends Controller
         $panier=new Panier();
         $panier->setIdClient($data["id_client"]);
         $panier->save();
+    }
+
+    public function getClientCommands(){
+        if(isset($_GET["id"])){
+            $commandes=Commande::getAll();
+            $commandesRet=[];
+            foreach($commandes as $commande){
+                if($commande["id_client"]==$_GET["id"]){
+                    $commandesRet[]=$commande;
+                }
+            }
+            header("Content-Type:application/json");
+            echo json_encode($commandesRet);
+        }
     }
 
     public function getClientPanier(){
@@ -72,8 +88,52 @@ final class ClientCtrl extends Controller
         }
     }
 
+    public function addToClientPanier(){
+        foreach(["idClient","idProduit","quantite","prixUnitaire"] as $field){
+            if(!isset($_POST[$field])){
+                header("Content-Type:application/json");
+                echo json_encode([
+                    "error"=>"uncorrect fields"
+                ]);
+                return NULL;
+            }
+        }
+        $paniers=Panier::getAll();
+        $paniersContenu=PanierContenu::getAll();
+        $idPanier=0;
+        $idProduit=$_POST["idProduit"];
+        foreach($paniers as $panier){
+            if($_POST["idClient"]==$panier["id_client"]){
+                $idPanier=$panier["id_panier"];
+            }
+        }
+        $createEntry=true;
+        foreach($paniersContenu as $panierContenu){
+            if($panierContenu["id_panier"]==$idPanier && $panierContenu["id_produit"]==$idProduit){
+                $createEntry=false;
+            }
+        }
+        if(!$createEntry){
+            header("Content-Type:application/json");
+            echo json_encode([
+                "error"=>"objet déjà présent dans le panier"
+            ]);
+        }else{
+            $panierContenu=new PanierContenu();
+            $panierContenu->setIdProduit($idProduit);
+            $panierContenu->setIdPanier($idPanier);
+            $panierContenu->setQuantite($_POST["quantite"]);
+            $panierContenu->setPrixUnitaire($_POST["prixUnitaire"]);
+            $panierContenu->save();  
+            header("Content-Type:application/json");
+            echo json_encode([
+                "error"=>""
+            ]); 
+        }
+    }
+
     public function updateClient(){
-        foreach(["id","adresse","ville","codePostal","email","motDePasse","id"] as $field){
+        foreach(["id","adresse","ville","codePostal","email","username","motDePasse","id"] as $field){
             if(!isset($_POST[$field])){
                 header("Content-Type:application/json");
                 echo json_encode([
@@ -83,6 +143,7 @@ final class ClientCtrl extends Controller
             }
         }
         $client=new Client();
+        $client->setUsername($_POST["username"]);
         $client->setIdClient($_POST["id"]);
         $client->setAdresse($_POST["adresse"]);
         $client->setVille($_POST["ville"]);

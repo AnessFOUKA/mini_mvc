@@ -22,6 +22,7 @@ $routes = [
     ['GET', '/panierContenu', [Mini\Controllers\PanierContenuCtrl::class, 'getAllPanierContenu']],
     ['GET', '/panier', [Mini\Controllers\PanierCtrl::class, 'getAllPanier']],
     ['GET', '/client/getClientPanier', [Mini\Controllers\ClientCtrl::class, 'getClientPanier']],
+    ['GET', '/client/getClientCommands', [Mini\Controllers\ClientCtrl::class, 'getClientCommands']],
     
     ['GET', '/categories/filterById', [Mini\Controllers\CategorieCtrl::class, 'getCategoriesFilteredById']],
     ['GET', '/client/filterById', [Mini\Controllers\ClientCtrl::class, 'getClientsFilteredById']],
@@ -32,12 +33,14 @@ $routes = [
     
     ['POST', '/categories/createCategory', [Mini\Controllers\CategorieCtrl::class, 'createCategory']],
     ['POST', '/client/createClient', [Mini\Controllers\ClientCtrl::class, 'createClient']],
+    ['POST', '/client/addToClientPanier', [Mini\Controllers\ClientCtrl::class, 'addToClientPanier']],
     ['POST', '/administrateurs/createAdministrateur', [Mini\Controllers\AdministrateurCtrl::class, 'createAdministrateur']],
     ['POST', '/commandes/createCommande', [Mini\Controllers\CommandeCtrl::class, 'createCommande']],
     ['POST', '/contenir/createContenir', [Mini\Controllers\ContenirCtrl::class, 'createContenir']],
     ['POST', '/produit/createProduit', [Mini\Controllers\ProduitCtrl::class, 'createProduit']],
     ['POST', '/panierContenu/createPanierContenu', [Mini\Controllers\PanierContenuCtrl::class, 'createPanierContenu']],
     ['POST', '/panier/createPanier', [Mini\Controllers\PanierCtrl::class, 'createPanier']],
+//addToClientPanier()
 
     ['POST', '/categories/updateCategory', [Mini\Controllers\CategorieCtrl::class, 'updateCategory']],
     ['POST', '/client/updateClient', [Mini\Controllers\ClientCtrl::class, 'updateClient']],

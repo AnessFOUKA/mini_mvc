@@ -14,7 +14,7 @@ body{
     overflow-y: scroll;
     display: grid;
     grid-template-columns: repeat(19,82px);
-    grid-template-rows: repeat(22,80px);
+    grid-template-rows: repeat(16,80px);
     height: 100%;
     width: 105%;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -56,7 +56,7 @@ nav label, footer label{
 
 footer{
     grid-column: 1/-1;
-    grid-row: 21/-1;
+    grid-row: 15/-1;
     border-top: 2px solid rgb(88, 62, 0);
 }
 
@@ -136,91 +136,75 @@ footer label{
     border-bottom: 2px solid rgb(88, 62, 0);
     flex-shrink: 0;
 }
-/*generic code*/
 
-#productImage{
-    grid-row: 3/7;
-    grid-column: 2/6;
-    object-fit: contain;
-    object-position: center;
-    border: 2px solid rgb(88, 62, 0);
-    border-radius: 3px;
-    width: 100%;
-    height: 100%;
+/*generic style rules*/
+
+#welcomeMessage{
+    grid-row: 3/4;
+    grid-column: 7/-7;
+    color: rgb(88, 62, 0);
+    font-size: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
 }
 
-#productData{
-    grid-row: 3/7;
-    grid-column: 7/14;
+#ordersPanel{
+    grid-row: 5/10;
+    grid-column: 6/-6;
     border: 2px solid rgb(88, 62, 0);
     border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+}
+
+#ordersPanel #panelTitle{
+    height: 10%;
+    border-bottom: 2px solid rgb(88, 62, 0);
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#ordersPanel #orders{
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    padding-left: 5%;
-    width: 95%;
+    flex-shrink: 0;
+    height: 90%;
 }
 
-#productData .data{
-    height: 10%;
+#ordersPanel #orders .order{
+    height: 20%;
+    flex-shrink: 0;
+    border-bottom: 2px solid rgb(88, 62, 0);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    flex-shrink: 0;
 }
 
-#productData button{
-    width: 45%;
-    border:2px solid rgb(88, 62, 0);
-    border-radius: 3px;
-    background-color: white;
-    margin-bottom: 6%;
-}
-
-#productData section{
-    width: 45%;
-    border:2px solid rgb(88, 62, 0);
-    border-radius: 3px;
-    background-color: white;
-    margin-bottom: 6%;
-    display: flex;
-    flex-shrink: 0;
-    height: 10%;
-    justify-content: center;
-    text-align: center;
-}
-
-#productData section label{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#categoryLabel{
-    grid-column: 1/-1;
-    grid-row: 8/9;
-    text-align: center;
-    width: 100%;
-    font-size: 40px;
-}
-
-#products{
-    grid-column: 2/-2;
-    grid-row: 10/15;
-    border: 2px solid rgb(88, 62, 0);
-    border-radius: 3px;
-    width: 100%;
-    height: 100%;
+#ordersPanel #orders .order #data{
+    height: 50%;
+    border-bottom: 2px solid rgb(88, 62, 0);
     display: flex;
     overflow-x: scroll;
+    flex-shrink: 0;
 }
 
-#product{
-    width: 1000px;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-left: 2px solid rgb(88, 62, 0);
+#ordersPanel #orders .order #data label{
+    display: flex;
+    overflow-x: scroll;
+    flex-shrink: 0;
+    width: 30%;
+    border-right: 2px solid rgb(88, 62, 0);
+}
+
+#ordersPanel #orders .order button{
+    background-color: white;
+    border: none;
+    color: rgb(88, 62, 0);
 }
 
 #errorMessage{

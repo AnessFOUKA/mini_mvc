@@ -13,27 +13,56 @@
     <section id="main" x-data>
         <img src="http://localhost:8080/s.jpg" id="background">
         <nav>
-            <label id="navBarLogo">pick n' buy</label> 
+            <label id="navBarLogo" @click="(()=>{
+                const aLink=document.createElement('a');
+                aLink.href='index.html';
+                aLink.click();
+            })()">pick n' buy</label> 
             <section id="searchBarSection">
                 <div id="specialStyleRule">
                     <button id="categoriesButton" @click="$store.data.showCategories=!$store.data.showCategories" x-text="$store.data.searchCategory"></button>
-                    <input type="text" id="searchBar">
-                    <button id="searchButton">rechercher</button>
+                    <input type="text" id="searchBar" x-model="$store.data.name">
+                    <button id="searchButton" @click="(()=>{
+                        const aLink=document.createElement('a');
+                        const id=$store.data.searchCategoryDBID;
+                        aLink.href='produits.html'+(id!=0||$store.data.name.length!=0?'?':'')+(id!=0?`id=${id}`:'')+(id!=0&&$store.data.name.length!=0?'&':'')+($store.data.name.length!=0?`name=${$store.data.name}`:'');
+                        aLink.click();
+                    })()">rechercher</button>
                 </div>
             </section>
-            <label>mon panier</label>
-            <label>mon compte</label>
+            <label @click="(()=>{
+                const aLink=document.createElement('a');
+                aLink.href=`wishList.html`;
+                aLink.click();
+            })()">mon panier</label>
+            <label @click="(()=>{
+                const aLink=document.createElement('a');
+                aLink.href=`myAccount.html`;
+                aLink.click();
+            })()">mon compte</label>
+            <label @click="(()=>{
+                const aLink=document.createElement('a');
+                aLink.href=`produits.html`;
+                aLink.click();
+            })()">produits</label>
         </nav>
-        <label id="categoryLabel" x-text="$store.data.categories[$store.data.categoryId].nom"></label>
-        <section id="products">
-            <template x-for="(product,productId) in $store.data.produits" :key="productId">
-                <img x-bind:src="`http://localhost:8080/${product.image}`" id="product" x-show="product.id_categorie===$store.data.categories[$store.data.categoryId].id_categorie">
-            </template>
-        </section>
         <section id="categoriesMenu" x-show="$store.data.showCategories">
             <label @click="$store.data.searchCategory='toutes catégories'">toutes catégories</label>
             <template x-for="(category,categoryIndex) in $store.data.categories" :key="categoryIndex">
-                <label x-text="category.nom" @click="$store.data.searchCategory=category.nom"></label>
+                <label x-text="category.nom" @click="(()=>{
+                    $store.data.searchCategory=category.nom;
+                    $store.data.searchCategoryDBID=category.id_categorie;
+                })()"></label>
+            </template>
+        </section>
+        <label id="categoryLabel" x-text="$store.data.categories[$store.data.categoryId].nom"></label>
+        <section id="products">
+            <template x-for="(product,productId) in $store.data.produits" :key="productId">
+                <img @click="(()=>{
+                    const aLink=document.createElement('a');
+                    aLink.href=`productPage.html?id=${product.id_produit}`;
+                    aLink.click();
+                })()" x-bind:src="`http://localhost:8080/${product.image}`" id="product" x-show="product.id_categorie===$store.data.categories[$store.data.categoryId].id_categorie">
             </template>
         </section>
         <section id="imageText">

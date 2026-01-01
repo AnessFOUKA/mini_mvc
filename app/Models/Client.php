@@ -14,10 +14,21 @@ class Client
     private $codePostal;
     private $email;
     private $motDePasse;
+    private $username;
 
     // =====================
     // Getters / Setters
     // =====================
+
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
 
     public function getIdClient()
     {
@@ -110,8 +121,8 @@ class Client
     public function save()
     {
         $pdo = Database::getPDO();
-        $stmt = $pdo->prepare("INSERT INTO client (adresse,ville,code_postal,email,mot_de_passe) VALUES (?, ?, ?, ?, ?)");
-        return $stmt->execute([$this->adresse, $this->ville,$this->codePostal,$this->email,$this->motDePasse]);
+        $stmt = $pdo->prepare("INSERT INTO client (username,adresse,ville,code_postal,email,mot_de_passe) VALUES (?,?, ?, ?, ?, ?)");
+        return $stmt->execute([$this->username,$this->adresse, $this->ville,$this->codePostal,$this->email,$this->motDePasse]);
     }
 
     /**
@@ -121,8 +132,8 @@ class Client
     public function update()
     {
         $pdo = Database::getPDO();
-        $stmt = $pdo->prepare("UPDATE client SET adresse = ?, ville = ?, code_postal= ?, email= ?, mot_de_passe= ? WHERE id_client = ?");
-        return $stmt->execute([$this->adresse, $this->ville,$this->codePostal,$this->email,$this->motDePasse, $this->idClient]);
+        $stmt = $pdo->prepare("UPDATE client SET username = ? adresse = ?, ville = ?, code_postal= ?, email= ?, mot_de_passe= ? WHERE id_client = ?");
+        return $stmt->execute([$this->username,$this->adresse, $this->ville,$this->codePostal,$this->email,$this->motDePasse, $this->idClient]);
     }
 
     /**

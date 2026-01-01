@@ -45,6 +45,9 @@ final class CommandeCtrl extends Controller
         $commande->setCodePostal($_POST["codePostal"]);
         $commande->setIdClient($_POST["idClient"]);
         $commande->save();
+        $idCommande=Commande::getAll()[0]["id_commande"];
+        header("Content-Type:application/json");
+        echo json_encode($idCommande);
     }
 
     public function updateCommande(){

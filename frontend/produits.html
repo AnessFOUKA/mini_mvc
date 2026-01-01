@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pompiere&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./src/styleProductPage.css">
+    <link rel="stylesheet" href="src/styleProduits.css">
 </head>
 <body>
     <section id="main" x-data>
@@ -54,43 +54,29 @@
                 })()"></label>
             </template>
         </section>
-        <img x-bind:src="`http://localhost:8080/${$store.data.produit.image}`" id="productImage">
-        <section id="productData">
-            <label class="data" x-text="`Nom: ${$store.data.produit.nom}`"></label>
-            <label class="data" x-text="`Prix: ${$store.data.produit.prix}`"></label>
-            <label class="data" x-text="`Stock: ${$store.data.produit.stock}`"></label>
-            <label class="data" x-text="`catégorie: ${$store.data.productCategory}`"></label>
-            <label class="data">Description:</label>
-            <label class="data" x-text="$store.data.produit.description"></label>
-            <button class="data" @click="$store.data.createCommande()">acheter</button>
-            <button class="data" @click="$store.data.addToWishList()">ajouter au panier</button>
-            <section>
-                <label @click="$store.data.quantity-=($store.data.quantity>1?1:0)"> - </label>
-                <label x-text="$store.data.quantity"></label>
-                <label @click="$store.data.quantity+=($store.data.quantity<$store.data.produit.stock?1:0)"> + </label>
-            </section>
-        </section>
-        <label id="categoryLabel">Autres produits de la même catégorie</label>
-        <section id="products">
+        
+        <label id="title">Produits</label>
+
+        <section id="productsList">
             <template x-for="(product,productId) in $store.data.produits" :key="productId">
-                <img @click="(()=>{
-                    const aLink=document.createElement('a');
-                    aLink.href=`productPage.html?id=${product.id_produit}`;
-                    aLink.click();
-                })()" x-bind:src="`http://localhost:8080/${product.image}`" id="product" x-show="product.id_categorie===$store.data.produit.id_categorie&&product.id_produit!=$store.data.produit.id_produit">
+                <section class="product" x-effect="console.log(`${product.id_categorie} ${$store.data.filter_categoryID}`)" x-show="((product.nom.startsWith($store.data.filter_name))||($store.data.filter_name==null))&&((product.id_categorie==$store.data.filter_categoryID)||($store.data.filter_categoryID==null))">
+                    <img x-bind:src="`http://localhost:8080/${product.image}`">
+                    <section>
+                        <label class="productData" x-text="`Nom : ${product.nom}`"></label>
+                        <label class="productData" x-text="`Prix : ${product.prix} euros`"></label>
+                        <button @click="(()=>{
+                            const aLink=document.createElement('a');
+                            aLink.href=`productPage.html?id=${product.id_produit}`
+                            aLink.click();
+                        })()">plus d'informations</button>
+                    </section>
+                </section>
             </template>
-        </section>
-        <section id="errorMessage" x-show="$store.data.message.length>0">
-            <label id="title">message</label>
-            <label class="content" x-text="$store.data.message"></label>
-            <div>
-                <button @click="$store.data.message=''">ok</button>
-            </div>
         </section>
         <footer>
             <label>©Pick n' buy - tous droits réservés</label>
         </footer>
     </section>
-    <script type="module" src="./src/productPageScript.js"></script>
+    <script type="module" src="src/produitsScript.js"></script>
 </body>
 </html>

@@ -9,6 +9,7 @@ import {getCategories,getProduits,getProduit} from "./functions";
         a.href="auth.html";
         a.click();
     }
+    let pendingRequest=false;
     const data={
         produits:Produits,
         categories:Categories,
@@ -17,6 +18,9 @@ import {getCategories,getProduits,getProduit} from "./functions";
         wishListItems:[],
         accountData:JSON.parse(sessionStorage.getItem("accountData")),
         pendingRequest:false,
+        message:"",
+        name:"",
+        searchCategoryDBID:0,
         updateWishListItems:async function(){
             try{
                 const response=await fetch(`http://localhost:8080/client/getClientPanier?id=${this.accountData["id_client"]}`);
@@ -27,6 +31,61 @@ import {getCategories,getProduits,getProduit} from "./functions";
                 this.wishListItems=responseJson;
             }catch(e){
                 throw new Error(e.message);
+            }
+        },
+        createCommande:async function(){
+            if(!pendingRequest){
+                pendingRequest=true;
+                if(this.accountData==null){
+                    const aLink=document.createElement("a");
+                    aLink.href=`auth.html?page=productPage.html?id=${this.produit.id_produit}`;
+                    aLink.click();
+                }
+                const accountData=this.accountData;
+                try{
+                    const response=await fetch("http://localhost:8080/commandes/createCommande",{
+                        method:"POST",
+                        headers:{
+                            "Content-Type":"application/x-www-form-urlencoded"
+                        },
+                        body:new URLSearchParams({
+                            statut:"en cours",
+                            montantTotal:this.getTotalPrice(),
+                            adresse:accountData.adresse,
+                            ville:accountData.ville,
+                            codePostal:accountData.code_postal,
+                            idClient:accountData.id_client
+                        })
+                    });
+                    if(!response.ok){
+                        throw new Error("Request error");
+                    }
+                    const IdCommande=await response.json();
+
+                    for(let wishListItem of this.wishListItems){
+                        const responseCommandContent=await fetch("http://localhost:8080/contenir/createContenir",{
+                            method:"POST",
+                            headers:{
+                                "Content-Type":"application/x-www-form-urlencoded"
+                            },
+                            body:new URLSearchParams({
+                                idProduit:wishListItem.infosProduit.id_produit,
+                                idCommande:IdCommande,
+                                quantite:wishListItem.panierContenu.quantite,
+                                prixUnitaire:wishListItem.infosProduit.prix,
+                                sousTotal:wishListItem.infosProduit.prix*wishListItem.panierContenu.quantite
+                            })
+                        });
+                        
+                        if(!responseCommandContent.ok){
+                            throw new Error("Request error");
+                        }
+                    }
+                    this.message="élements achetés avec succès";
+                }catch(e){
+                    this.message=e.message;
+                }
+                pendingRequest=true;
             }
         },
         setNewData:async function(Quantite,IdProduit,IdPanier,PrixUnitaire){

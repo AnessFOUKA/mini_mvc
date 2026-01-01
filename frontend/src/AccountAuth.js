@@ -6,9 +6,10 @@ import Alpine from "alpinejs";
         Alpine.store("data",{
             fields:{
                 "Connexion":["mail","mot de passe"],
-                "Inscription":["mail","mot de passe","adresse","ville","code postal"]
+                "Inscription":["nom utilisateur","mail","mot de passe","adresse","ville","code postal"]
             },
             fieldsValues:{
+                "nom utilisateur":"",
                 "mail":"",
                 "mot de passe":"",
                 "adresse":"",
@@ -46,6 +47,7 @@ import Alpine from "alpinejs";
                 }
             },
             signUp:async function(){
+                const Username=this.fieldsValues["nom utilisateur"];
                 const Adresse=this.fieldsValues["adresse"];
                 const Mail=this.fieldsValues["mail"];
                 const MotDePasse=this.fieldsValues["mot de passe"];
@@ -67,6 +69,7 @@ import Alpine from "alpinejs";
                                 "Content-Type":"application/x-www-form-urlencoded"
                             },
                             body:new URLSearchParams({
+                                username:Username,
                                 adresse:Adresse,
                                 email:Mail,
                                 motDePasse:MotDePasse,
@@ -80,6 +83,7 @@ import Alpine from "alpinejs";
                         this.loading=false;
                         this.fieldIndex="Connexion";
                         this.fieldsValues={
+                            "nom utilisateur":"",
                             "mail":"",
                             "mot de passe":"",
                             "adresse":"",

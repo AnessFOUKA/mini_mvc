@@ -25,6 +25,7 @@
       <label id="authChanger" x-text="$store.data.fieldIndex==='Connexion'?`Je n'ai pas de compte ? S'inscrire`:`J'ai un compte ? S'inscrire`" @click="(()=>{
         $store.data.fieldIndex==='Connexion'?$store.data.fieldIndex='Inscription':$store.data.fieldIndex='Connexion';
         $store.data.fieldsValues={
+          'nom utilisateur':'',
           'mail':'',
           'mot de passe':'',
           'adresse':'',
@@ -43,6 +44,7 @@
       <button @click="(()=>{
         $store.data.error='';
         $store.data.fieldsValues={
+          'nom utilisateur':'',
           'mail':'',
           'mot de passe':'',
           'adresse':'',

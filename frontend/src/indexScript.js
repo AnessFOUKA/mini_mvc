@@ -10,6 +10,7 @@ import {getCategories,getProduits} from "./functions";
             produits:Produits,
             searchCategory:"toutes catégories",
             searchCategoryDBID:0,
+            name:"",
             categoryId:Math.floor(Math.random()*((Categories.length-1)-0+1)+0),
             showCategoriesMenu:false,
             indexes:[]
