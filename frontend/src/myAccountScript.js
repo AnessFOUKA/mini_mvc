@@ -21,29 +21,34 @@ async function getCommandes(id){
         categories:Categories,
         commandes:[],
         message:"",
+        loading:false,
         setCommandAsCanceled:async function(Command){
-            try{
-                const response=await fetch("http://localhost:8080/commandes/updateCommande",{
-                    method:"POST",
-                    headers:{
-                        "Content-Type":"application/x-www-form-urlencoded"
-                    },
-                    body:new URLSearchParams({
-                        id:Command.id_commande,
-                        statut:"annulee",
-                        montantTotal:Command.montant_total,
-                        adresse:Command.adresse,
-                        ville:Command.ville,
-                        codePostal:Command.code_postal,
-                        idClient:Command.id_client
-                    })
-                });
-                if(!response.ok){
-                    throw new Error("Request error");
+            if(!this.loading){
+                this.loading=true;
+                try{
+                    const response=await fetch("http://localhost:8080/commandes/updateCommande",{
+                        method:"POST",
+                        headers:{
+                            "Content-Type":"application/x-www-form-urlencoded"
+                        },
+                        body:new URLSearchParams({
+                            id:Command.id_commande,
+                            statut:"annulee",
+                            montantTotal:Command.montant_total,
+                            adresse:Command.adresse,
+                            ville:Command.ville,
+                            codePostal:Command.code_postal,
+                            idClient:Command.id_client
+                        })
+                    });
+                    if(!response.ok){
+                        throw new Error("Request error");
+                    }
+                    this.commandes=await getCommandes(data.accountData.id_client);
+                }catch(e){
+                    this.error=e.message;
                 }
-                this.commandes=await getCommandes(data.accountData.id_client);
-            }catch(e){
-                this.error=e.message;
+                this.loading=false;
             }
         },
         searchCategory:"toutes catégories",
