@@ -29,6 +29,7 @@ CREATE TABLE Produit (
 
 CREATE TABLE Client (
    id_client INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
+   username VARCHAR(50),
    adresse VARCHAR(50),
    ville VARCHAR(50),
    code_postal VARCHAR(5),
@@ -51,16 +52,6 @@ CREATE TABLE Commande (
    FOREIGN KEY (id_client) REFERENCES Client(id_client)
        ON DELETE CASCADE
        ON UPDATE CASCADE
-);
-
-CREATE TABLE Administrateur (
-   id_admin INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
-   nom_utilisateur VARCHAR(50) UNIQUE,
-   email VARCHAR(50),
-   mot_de_passe VARCHAR(50),
-   superadmin BOOLEAN,
-   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Contenir (
@@ -145,12 +136,12 @@ INSERT INTO Produit (nom, description, prix, stock, image, disponibilite, id_cat
 ('DVD Interstellar', 'Film de science-fiction epique', 13.50, 50, 'interstellar.png', TRUE, 5),
 ('Blu-ray Toy Story', 'Film d animation Pixar', 10.00, 40, 'toystory.png', TRUE, 5);
 
-INSERT INTO Client (adresse, ville, code_postal, email, mot_de_passe) VALUES
-('12 rue de la Paix', 'Paris', '75001', 'client1@example.com', 'motdepasse1'),
-('34 avenue des Champs', 'Lyon', '69002', 'client2@example.com', 'motdepasse2'),
-('56 boulevard Saint-Michel', 'Marseille', '13001', 'client3@example.com', 'motdepasse3'),
-('78 rue Victor Hugo', 'Toulouse', '31000', 'client4@example.com', 'motdepasse4'),
-('90 avenue de la Republique', 'Nice', '06000', 'client5@example.com', 'motdepasse5');
+INSERT INTO Client (username,adresse, ville, code_postal, email, mot_de_passe) VALUES
+('client1','12 rue de la Paix', 'Paris', '75001', 'client1@example.com', 'motdepasse1'),
+('client2','34 avenue des Champs', 'Lyon', '69002', 'client2@example.com', 'motdepasse2'),
+('client3','56 boulevard Saint-Michel', 'Marseille', '13001', 'client3@example.com', 'motdepasse3'),
+('client4','78 rue Victor Hugo', 'Toulouse', '31000', 'client4@example.com', 'motdepasse4'),
+('client5','90 avenue de la Republique', 'Nice', '06000', 'client5@example.com', 'motdepasse5');
 
 INSERT INTO Commande (statut, montant_total, adresse, ville, code_postal, id_client) VALUES
 ('en cours', 23.50, '12 rue de la Paix', 'Paris', '75001', 1),
@@ -198,11 +189,12 @@ INSERT INTO Contenir (id_produit, id_commande, quantite, prix_unitaire, sous_tot
 (13, 10, 1, 39.99, 39.99),
 (14, 10, 1, 59.99, 59.99);
 
-INSERT INTO Administrateur (nom_utilisateur, email, mot_de_passe, superadmin) VALUES
-('admin1', 'admin1@example.com', 'motdepasse1', FALSE),
-('superadmin', 'superadmin@example.com', 'motdepasse2', TRUE);
-
-INSERT INTO Panier (id_client) VALUES (1);
+INSERT INTO Panier (id_client) VALUES 
+(1),
+(2),
+(3),
+(4),
+(5);
 
 INSERT INTO Panier_Contenu (id_panier, id_produit, quantite, prix_unitaire) VALUES
 (1, 3, 2, 2.80),
